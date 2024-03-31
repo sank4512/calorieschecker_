@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<h lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calories Tracker</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+         body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-image: url('https://img.freepik.com/premium-photo/background-cooking-tagliatelle-pasta-ingredients-black-stone-background-italian-cuisine-top-view_187166-46923.jpg?w=1380'); /* Replace 'your-image-url.jpg' with the URL of your image */
+
+background-size: cover; 
+background-repeat: no-repeat; 
+background-position: center; 
+position: relative;
+         }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: rgb(0, 139, 28);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: white;
+        }
+
+        input,
+        select,
+        button {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid hsl(0, 17%, 2%);
+            box-sizing: border-box;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: rgb(0, 139, 28);
+            color: #080707;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3be81d;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #3a7889;
+            color: white;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: rgb(0, 139, 25);
+            color: #060404;
+        }
+
+        .result {
+            margin-top: 20px;
+        }
+
+        .reset {
+            background-color: rgb(0, 139, 0);
+            color: #060303;
+            cursor: pointer;
+        }
+
+        .reset:hover {
+            background-color: #1de824;
+        }
+
+        /* Small button style */
+        .small-button {
+            font-size: 0.8em;
+            padding: 5px;
+            margin-top: 10px;
+        }
+      /* Top dashboard styles */
+        #topDashboard {
+            display: flex;
+            justify-content: space-between;
+            background-color: #333;
+            padding: 10px;
+            color: #fff;
+            align-items: center;
+            text-align: center;
+        }
+
+        #topDashboard h1 {
+            margin: 0;
+        }
+
+        #topDashboard ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        #topDashboard li {
+            margin-right: 20px;
+        }
+
+        #topDashboard a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+       
+
+        /* Chatbot styles */
+        #chatbotButton {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-image: url('https://support.upwork.com/hc/article_attachments/360040474034/chatbot-data.png');
+            /* Add your chatbot icon image path */
+            background-size: cover;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 99999;
+        }
+
+        #chatbotContainer {
+            align-self: center;
+            background-color: #f5f1f1;
+            border: 1px solid #050303;
+            border-radius: 5px;
+            padding: 10px;
+            display: none;
+            z-index: 99999;
+        }
+
+        .question {
+            background-color: #f8f5f5;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .answer {
+            display: none;
+            padding: 10px;
+            background-color: #e4dada;
+            border: 1px solid #050404;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .chatbot-name {
+            text-align: center;
+        }
+       /* Sidebar styles */
+        #recommendationsPage {
+            display: none;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #dietList,
+        #workoutList {
+            list-style: none;
+            padding: 0;
+        }
+
+        #dietList li,
+        #workoutList li {
+            margin-bottom: 10px;
+        }
+
+        #dietList h3,
+        #workoutList h3 {
+            margin-top: 20px;
+        }
+        /* New styles for dashboard layout */
+        .result p {
+    color: white; /* Set text color to white */
+}
+.calories-circle-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.calories-label {
+    color: white;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.calories-circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #a7c7b6;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    margin-bottom: 10px; /* Adjust margin as needed */
+}
+
+#topDashboard {
+            display: none; /* Hide the top dashboard by default */
+        }
+   
+
+    </style>
+</head>
+<body>
+  <div id="topDashboard" style="display: none;">
+       
+        <ul>
+          <li><a href="#" onclick="navigateTo('calculatePage')">Calculate Calories</a></li>
+                <li><a href="#" onclick="navigateTo('summaryPage')">Calories Summary</a></li>
+               
+                <li><a href="#" onclick="showRecommendations()">recommended</a></li>
+                
+         
+        </ul>
+    </div>
+    <div id="dashboard">
+        
+        <div id="content"></div>
+    <div class="container">
+        <!-- Login/Signup Page -->
+        <div id="loginSignupPage">
+            <h2>Login/Signup Page</h2>
+            <label for="username">Username:</label>
+            <input type="text" id="username" required minlength="8" placeholder="Enter your username">
+            <label for="password">Password:</label>
+            <input type="password" id="password" required minlength="8" placeholder="Enter your password">
+            <button onclick="login()">Login</button>
+            <!-- Small signup button with explanatory comment -->
+            <button class="small-button" onclick="navigateTo('signupPage')">Don't have an account? Signup</button>
+        </div>
+
+        <!-- Signup Page -->
+        <div id="signupPage" style="display: none;">
+            <h2>Signup Page</h2>
+            <label for="signupUsername">Username:</label>
+            <input type="text" id="signupUsername" required minlength="8" placeholder="Enter your username">
+            <label for="signupPassword">Password:</label>
+            <input type="password" id="signupPassword" required minlength="8" placeholder="Enter your password">
+            <button onclick="signup()">Signup</button>
+            <!-- Small login button with explanatory comment -->
+            <button class="small-button" onclick="navigateTo('loginSignupPage')">Already have an account? Login</button>
+        </div>
+        
+        <button id="chatbotButton"  onclick="toggleChatbot()"></button>
+      
+        <!-- Chatbot Container -->
+        <div id="chatbotContainer">
+            <h1 class="chatbot-name">Health Assistant</h1>
+            <h3>Hi, I am your health assistant, how can I help you?</h3>
+   
+            <div class="question" onclick="showAnswer('answer1')">How can I maintain a healthy weight?</div>
+            <div class="answer" id="answer1">Maintaining a healthy weight involves a balanced diet and regular exercise. Avoiding processed foods and sugary drinks can also help.</div>
+            
+            <div class="question" onclick="showAnswer('answer2')">Is there a way to increase height after a certain age?</div>
+            <div class="answer" id="answer2">Height is largely determined by genetics. While proper nutrition and exercise during adolescence can support growth, height increase after a certain age is unlikely.</div>
+    
+            <div class="question" onclick="showAnswer('answer3')">What are some good exercises for beginners?</div>
+            <div class="answer" id="answer3">For beginners, activities like walking, swimming, and cycling are good starting points. Start with low intensity and gradually increase duration and intensity.</div>
+            <!-- Add more questions and answers as needed -->
+            <div class="question" onclick="showAnswer('answer4')">What diet should I follow for better health?</div>
+            <div class="answer" id="answer4">A balanced diet includes fruits, vegetables, whole grains, lean proteins, and healthy fats. Limit processed foods, sugary snacks, and excessive salt intake.</div>
+            <div class="question" onclick="showAnswer('answer5')">How can I manage stress effectively?</div>
+            <div class="answer" id="answer5">Stress management techniques include deep breathing, meditation, yoga, regular exercise, and maintaining a healthy work-life balance.</div>
+            <div class="question" onclick="showAnswer('answer6')">How many hours of sleep do I need?</div>
+            <div class="answer" id="answer6">Most adults need 7-9 hours of sleep per night for optimal health and well-being.</div>
+            <div class="question" onclick="showAnswer('answer7')">Why is staying hydrated important</div>
+            <div class="answer" id="answer7">Staying hydrated is essential for regulating body temperature, maintaining bodily functions, and supporting overall health. Aim for 8 glasses of water per day. </div>
+           
+       
+        </div>
+        
+
+        <!-- Calculate Calories Page -->
+        <div id="calculatePage" style="display: none;">
+            <h2>Calculate Calories Page</h2>
+            <label for="height">Height (cm):</label>
+            <input type="number" id="height" required placeholder="Enter your height">
+            <label for="weight">Weight (kg):</label>
+            <input type="number" id="weight" required placeholder="Enter your weight">
+            <label for="age">Age:</label>
+            <input type="number" id="age" required placeholder="Enter your age">
+            <label for="gender">Gender:</label>
+            <select id="gender" required>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+            <button onclick="calculateCalories()">Calculate</button>
+        </div>
+
+        <!-- Calories Summary Page -->
+        <div id="summaryPage" style="display: none;">
+            <h2>Calories Summary Page</h2>
+           
+              <label for="consumedFood">Consumed Food:</label>
+            <select id="consumedFood" required>
+                <option value="">Select a food item</option>
+            </select>
+            <label for="quantity">Quantity (g):</label>
+            <input type="number" id="quantity" required placeholder="Enter the quantity">
+            <button onclick="logFood()">Log Food</button>
+            <table id="caloriesTable">
+            </div>
+            <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="calories-circle-container">
+                    <div class="calories-label">Required Calories</div>
+                    <div class="calories-circle" id="requiredCaloriesCircle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+            
+                <tr>
+                    <th>Food Item</th>
+                    <TH>Quantity</TH>
+                    <th>Calories</th>
+                    
+                    <th>Action</th>
+                </tr>
+            </table>
+            
+            <div class="result">
+                <p>Total Consumed Calories: <span id="totalConsumedCalories">0</span></p>
+                <p>Remaining Calories: <span id="remainingCalories">0</span></p>
+                <p id="suggestions"></p>
+            </div>
+            <button class="reset" onclick="resetInfo()">Reset Information</button>
+            <button onclick="navigateTo('loginSignupPage')">Go back to Login/Signup Page</button>
+        </div>
+        <!-- Recommendations Page -->
+        <div id="recommendationsPage">
+           <h2>Recommendations</h2>
+           <p>Your remaining calories: <span id="remainingCaloriesDisplay"></span></p>
+
+           <h3>Diet Plan</h3>
+           <ul id="dietList">
+             
+           </ul>
+
+           <h3>Workout Plan</h3>
+           <ul id="workoutList"></ul>
+         
+         </div>
+    </div>
+</div>
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script>
+        let requiredCalories = 0;
+        let totalConsumedCalories = 0;
+        
+        const foodLog = [];
+        const foodDatabase = [
+           { name: 'Apple', calories: 52 },
+            { name: 'Banana', calories: 105 },
+            { name: 'Chicken Breast', calories: 165 },
+            { name: 'Samosas', calories: 125 },
+            { name: 'Butter chicken', calories: 400 },
+            { name: 'Aloo Gobi', calories: 150 },
+            { name: 'Chana Masala', calories: 250 },
+            { name: 'Biryani', calories: 500 },
+            { name: 'Tandoori Chicken', calories: 200 },
+            { name: 'Naan', calories: 200 },
+          { name: 'Roti', calories: 100 },
+    { name: 'Paratha', calories: 150 },
+    { name: 'Chapati', calories: 60 },
+    { name: 'Egg Boiled', calories: 80 },
+           { name: 'Egg Omelette', calories: 120 },
+    { name: 'Idli', calories: 100 },
+    { name: 'Bhakri', calories: 113 },
+    { name: 'Rice', calories: 120 },
+    { name: 'Fried Rice', calories: 150 },
+    { name: 'Black Tea', calories: 10 },
+    { name: 'Black Tea With Milk And Sugar', calories: 45 },
+    { name: 'Black Coffee', calories: 10 },
+    { name: 'Black Coffee With Milk And Sugar', calories: 45 },
+    { name: 'Milk', calories: 60 },
+    { name: 'Milk With Sugar', calories: 75 },
+    { name: 'Horlicks', calories: 120 },
+    { name: 'Puri', calories: 60 },
+    { name: 'Dal', calories: 150 },
+    { name: 'Papad', calories: 45 },
+    { name: 'Shahi Paneer ', calories: 263 },
+        { name: 'Burger', calories: 325 },
+    { name: 'Pizza', calories: 375 },
+    { name: 'Dahi Wada', calories: 364 },
+    { name: 'Bread', calories: 60 },
+    { name: 'Orange Juice', calories: 95 },
+    { name: 'Apple Juice', calories: 95 },
+    { name: 'Mango', calories: 70 },
+    { name: 'Orange', calories: 53 },
+    { name: 'Chikoo', calories: 94 },
+    { name: 'Papaya', calories: 32 },
+    { name: 'Peach', calories: 50 },
+    { name: 'Aloo Paratha', calories: 250 },
+    { name: 'Gulab Jamun', calories: 100 },
+    { name: 'Jalebi', calories: 125 },
+    { name: 'Shahi Tukda', calories: 300 },
+    { name: 'Malai Kofta', calories: 150 },
+    { name: 'Fish Curry', calories: 485 },
+    { name: 'Black Grapes', calories: 45 },
+    { name: 'Cherries', calories: 70 },
+    { name: 'Guava', calories: 66 },
+          
+            // Food database entries
+        ];
+        const dietPlans = [
+            
+          
+           { title: 'Grilled Chicken Salad', calories: 300 },
+    { title: 'Quinoa Bowl with Roasted Vegetables', calories: 250 },
+    { title: 'Greek Yogurt Parfait with Berries', calories: 150 },
+    { title: 'Oatmeal with Almonds and Banana', calories: 200 },
+    { title: 'Salmon with Steamed Broccoli', calories: 350 },
+    { title: 'Avocado Toast with Poached Egg', calories: 220 },
+    { title: 'Turkey and Veggie Wrap', calories: 280 },
+    { title: 'Mixed Berry Smoothie', calories: 180 },
+    { title: 'Sweet Potato and Black Bean Bowl', calories: 320 },
+    { title: 'Cottage Cheese with Pineapple', calories: 120 },
+    { title: 'Whole Wheat Pasta with Tomato Sauce', calories: 270 },
+    { title: 'Almond Butter and Banana Sandwich', calories: 230 },
+    { title: 'Spinach and Feta Stuffed Chicken Breast', calories: 320 },
+    { title: 'Brown Rice with Stir-Fried Tofu and Vegetables', calories: 300 },
+    { title: 'Chickpea Salad with Cucumber and Tomato', calories: 180 },
+    { title: 'Quinoa and Black Bean Salad', calories: 250 },
+    { title: 'Egg White Omelette with Spinach and Tomatoes', calories: 150 },
+    { title: 'Hummus with Carrot and Celery Sticks', calories: 100 },
+    { title: 'Green Smoothie with Kale and Mango', calories: 200 },
+    { title: 'Grilled Shrimp with Asparagus', calories: 280 },
+    // Add more diet items as needed
+            // Add more diet plans as needed
+        ];
+        const workoutVideos = [
+  
+          { title: 'Sample Workout Video', videoUrl: 'https://www.youtube.com/embed/6k8npknseG4?si=KIP3Up_xFftA-zqr', caloriesBurnedPerMinute: 12 },
+    // Add more workout videos as needed
+   
+];
+
+
+        // Signup and Login functionality
+        const userDatabase = [];
+
+        function signup() {
+            const username = document.getElementById('signupUsername').value;
+            const password = document.getElementById('signupPassword').value;
+
+            if (username.length < 8 || password.length < 8) {
+                alert('Username and password must be at least 8 characters long.');
+            } else {
+                const existingUser = userDatabase.find(user => user.username === username);
+                if (existingUser) {
+                    alert('Username already exists. Please choose a different one.');
+                } else {
+                    userDatabase.push({ username, password });
+                    localStorage.setItem('userDatabase', JSON.stringify(userDatabase));
+
+                    alert('Signup successful! Please login.');
+                     // Redirect to login page after successful signup
+                    localStorage.setItem('isLoggedIn', true);
+                    navigateTo('loginSignupPage');
+                }
+            }
+        }
+
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const storedUsers = JSON.parse(localStorage.getItem('userDatabase')) || [];
+            const loggedInUser = storedUsers.find(user => user.username === username && user.password === password);
+
+            if (loggedInUser) {
+                alert('Welcome, ' + username + '!');
+                
+                localStorage.setItem('isLoggedIn', true);
+                navigateTo('calculatePage');
+            } else {
+                alert('Invalid username or password. Please try again.');
+            }
+        }
+      
+    function navigateToDashboard() {
+        // Hide all pages except the dashboard
+        document.getElementById('loginSignupPage').style.display = 'none';
+        document.getElementById('calculatePage').style.display = 'none';
+        document.getElementById('summaryPage').style.display = 'none';
+            document.getElementById('signupPage').style.display = 'none';
+      
+        document.getElementById('dashboard').style.display = 'flex';
+ 
+        }
+    function checkAuthentication() {
+        // Check if the user is authenticated
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+
+        if (!isLoggedIn) {
+            // If not authenticated, redirect to the login/signup page
+            navigateTo('loginSignupPage');
+        }
+    }
+
+    // Call checkAuthentication when the page loads to enforce authentication
+    checkAuthentication();
+        function toggleChatbot() {
+            var chatbotContainer = document.getElementById("chatbotContainer");
+            chatbotContainer.style.display = (chatbotContainer.style.display === "none") ? "block" : "none";
+        }
+        
+
+        function showAnswer(answerId) {
+            var answer = document.getElementById(answerId);
+            if (answer.style.display === "block") {
+                answer.style.display = "none";
+            } else {
+                answer.style.display = "block";
+            }
+        }
+      
+
+        function calculateRequiredCalories(height, weight, age, gender) {
+            let basalMetabolicRate;
+
+            if (gender === 'male') {
+                basalMetabolicRate = 10 * weight + 6.25 * height - 5 * age + 5;
+            } else {
+                basalMetabolicRate = 10 * weight + 6.25 * height - 5 * age - 161;
+            }
+
+            return Math.round(basalMetabolicRate * 1.2);
+        }
+
+        function calculateCalories() {
+            const height = parseFloat(document.getElementById('height').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const age = parseInt(document.getElementById('age').value);
+            const gender = document.getElementById('gender').value;
+
+            requiredCalories = calculateRequiredCalories(height, weight, age, gender);
+
+            var requiredCaloriesCircle = document.getElementById("requiredCaloriesCircle");
+
+// Example value, replace with your actual value
+
+    requiredCaloriesCircle.innerText = requiredCalories;
+
+            
+
+            navigateTo('summaryPage');
+            populateFoodOptions();
+        }
+
+        function populateFoodOptions() {
+            const selectFood = document.getElementById('consumedFood');
+            selectFood.innerHTML = '<option value="">Select a food item</option>';
+
+            foodDatabase.forEach(food => {
+                const option = document.createElement('option');
+                option.value = food.name;
+                option.textContent = food.name;
+                selectFood.appendChild(option);
+            });
+        }
+
+        function logFood() {
+            const consumedFood = document.getElementById('consumedFood').value;
+            const quantity = parseFloat(document.getElementById('quantity').value);
+
+            if (!consumedFood) {
+                alert('Please select a food item.');
+                return;
+            }
+
+            if (isNaN(quantity) || quantity <= 0) {
+                alert('Please enter a valid quantity.');
+                return;
+            }
+
+            const foodEntry = foodDatabase.find(item => item.name.toLowerCase() === consumedFood.toLowerCase());
+
+            if (foodEntry) {
+                const caloriesConsumed = (foodEntry.calories / 100) * quantity;
+                foodLog.push({ foodItem: consumedFood, foodCalories: caloriesConsumed });
+                totalConsumedCalories += caloriesConsumed;
+                displayFoodLog();
+                displayTotalConsumedCalories();
+                calculateRemainingCalories();
+                checkCaloriesStatus();
+            } else {
+                alert('Food item not found in the database. Please select a valid food item.');
+            }
+        }
+
+        function displayFoodLog() {
+            const table = document.getElementById('caloriesTable').getElementsByTagName('tbody')[0];
+
+            const newRow = table.insertRow();
+            const foodCell = newRow.insertCell(0);
+            const quantityCell = newRow.insertCell(1);
+            const calorieCell = newRow.insertCell(2);
+            const removeCell = newRow.insertCell(3); 
+            const consumedFood = document.getElementById('consumedFood').value;
+            foodCell.textContent = consumedFood;
+
+            const quantity = parseFloat(document.getElementById('quantity').value);
+            quantityCell.textContent = quantity;
+            const foodEntry = foodDatabase.find(item => item.name.toLowerCase() === consumedFood.toLowerCase());
+            const caloriesConsumed = (foodEntry.calories / 100) * quantity;
+            calorieCell.textContent = caloriesConsumed.toFixed(2);
+            const removeButton = document.createElement('button');
+    removeButton.textContent = 'Remove';
+    removeButton.addEventListener('click', function() {
+        removeFoodEntry(newRow, caloriesConsumed);
+    });
+
+    removeCell.appendChild(removeButton);
+}
+
+function removeFoodEntry(row, calories) {
+    const rowIndex = row.rowIndex;
+    document.getElementById('caloriesTable').deleteRow(rowIndex);
+
+    totalConsumedCalories -= calories;
+    displayTotalConsumedCalories();
+    calculateRemainingCalories();
+    checkCaloriesStatus();
+}
+        
+
+        function displayTotalConsumedCalories() {
+            document.getElementById('totalConsumedCalories').textContent = totalConsumedCalories.toFixed(2);
+        }
+
+        function calculateRemainingCalories() {
+            const remainingCalories = requiredCalories - totalConsumedCalories;
+            document.getElementById('remainingCalories').textContent = remainingCalories.toFixed(2);
+        }
+        function showRecommendations() {
+            const remainingCalories = requiredCalories - totalConsumedCalories;
+
+            if (remainingCalories >= 0) {
+                document.getElementById('remainingCaloriesDisplay').textContent = remainingCalories.toFixed(2);
+
+                // Display diet plans
+                const dietList = document.getElementById('dietList');
+                dietList.innerHTML = '';
+                dietPlans.forEach(plan => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `<strong>${plan.title}</strong>:(Calories: ${plan.calories})`;
+                    dietList.appendChild(listItem);
+                });
+
+                
+
+                // Show the recommendations page
+                navigateTo('recommendationsPage');
+            } else {
+                alert('Oops! You\'ve exceeded your daily calorie intake. Consider doing some exercise to burn excess calories.');
+              document.getElementById('remainingCaloriesDisplay').textContent = remainingCalories.toFixed(2);
+            // Show the recommendations page
+              // Display workout videos
+                const workoutList = document.getElementById('workoutList');
+                workoutList.innerHTML = '';
+                workoutVideos.forEach(video => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `<strong>${video.title}</strong>: <iframe width="300" height="215" src="${video.videoUrl}" frameborder="0" allowfullscreen></iframe> (Calories burned per minute: ${video.caloriesBurnedPerMinute})`;
+                    workoutList.appendChild(listItem);
+                });
+                navigateTo('recommendationsPage');
+            }
+        }
+
+        function resetInfo() {
+            requiredCalories = 0;
+            totalConsumedCalories = 0;
+            foodLog.length = 0;
+
+            document.getElementById('height').value = '';
+            document.getElementById('weight').value = '';
+            document.getElementById('age').value = '';
+            document.getElementById('gender').value = '';
+            document.getElementById('consumedFood').value = '';
+            document.getElementById('quantity').value = '';
+            document.getElementById('requiredCalories').value = '';
+
+            const table = document.getElementById('caloriesTable').getElementsByTagName('tbody')[0];
+            table.innerHTML = '';
+
+            displayTotalConsumedCalories();
+            calculateRemainingCalories();
+
+            alert('Information has been reset.');
+        }
+
+        function navigateTo(pageId) {
+            console.log('Navigating to page:', pageId);
+            // Hide all pages
+            document.getElementById('loginSignupPage').style.display = 'none';
+            document.getElementById('calculatePage').style.display = 'none';
+            document.getElementById('summaryPage').style.display = 'none';
+            document.getElementById('recommendationsPage').style.display = 'none';
+            document.getElementById('signupPage').style.display = 'none';
+
+            // Show the selected page
+            document.getElementById(pageId).style.display = 'block';
+            if (pageId === 'loginSignupPage' || pageId === 'signupPage') {
+                console.log('Hiding chatbot button');
+        document.getElementById('topDashboard').style.display = 'none';
+        document.getElementById('chatbotButton').style.display = 'none'; 
+    } else {
+        console.log('Showing chatbot button');
+        document.getElementById('topDashboard').style.display = 'block';
+        document.getElementById('chatbotButton').style.display = 'block'; 
+    }
+}
+        
+  function checkCaloriesStatus() {
+            const remainingCalories = requiredCalories - totalConsumedCalories;
+            const suggestionsElement = document.getElementById('suggestions');
+            if (remainingCalories < 0) {
+                suggestionsElement.textContent = 'You have exceeded your daily calorie intake. Consider doing some exercise to burn excess calories.';
+            } else {
+                suggestionsElement.textContent = 'You have consumed fewer calories than required. Consider eating more to meet your daily calorie goal.';
+            }
+        }
+        
+    </script>
+</body>
+</html>
